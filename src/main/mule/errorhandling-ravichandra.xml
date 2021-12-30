@@ -38,4 +38,18 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			</on-error-propagate>
 		</error-handler>
 	</flow>
+	<flow name="errorhandling-ravichandraFlow2" doc:id="d0b5e695-ffa6-42b1-8aef-1f6d01fe4f68" >
+		<http:listener doc:name="Listener" doc:id="3731ac2c-a4f3-4cfb-ab41-901050bc1886" config-ref="HTTP_Listener_config" path="/errorc"/>
+		<set-payload value='#["welcome to the main flow"]' doc:name="Set Payload" doc:id="18ef9abb-4c67-48b6-a648-efd40cf0c055" />
+		<flow-ref doc:name="Flow Reference" doc:id="bedd6607-2f63-4aac-8bac-e23d0f4164c8" name="errorhandling-ravichandraprivateFlowc"/>
+	</flow>
+	<flow name="errorhandling-ravichandraprivateFlowc" doc:id="38114350-ff4d-4fff-8229-3cfe793dbf30" >
+		<http:request method="GET" doc:name="Request" doc:id="b16e3ed7-ce03-4118-8c70-aa25b97d33f1" url="usr.com"/>
+		<set-payload value='#["hello"]' doc:name="Set Payload" doc:id="cff1ac0d-7973-4c40-8259-3b3af042bbde" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="debb33cf-6897-40e7-b6fc-cca0151d19d6" type="HTTP:CONNECTIVITY">
+				<set-payload value='#["handled error in error continue"]' doc:name="Set Payload" doc:id="d386eb84-c42d-4396-820a-c3d3b1530592" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
 </mule>
