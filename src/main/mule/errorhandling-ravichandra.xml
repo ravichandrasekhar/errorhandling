@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c6317755-0f64-431e-9c79-7e6de612fd47" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="errorhandling-ravichandraFlow" doc:id="d377b7e5-98fe-41fc-a748-48ee71dc607f" >
+		<http:listener doc:name="Listener" doc:id="56599a15-fbb6-4fd7-91df-68558942d983" config-ref="HTTP_Listener_config" path="/error">
+			<http:error-response >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<set-payload value='#["welcome tutorial of error handling"]' doc:name="Set Payload" doc:id="ee00be5f-63bb-4add-a715-1ab7f3928ca9" />
+		<http:request method="GET" doc:name="Request" doc:id="a906e2ff-8b99-4422-be02-b4287c5ca587" url="ussr.com"/>
+		<error-handler>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="59daa77d-c0fa-4d86-8fcb-12b448785440" type="HTTP:CONNECTIVITY">
+				<set-payload value='#["welcome to the on error Propagate"]' doc:name="Set Payload" doc:id="ccad1304-6c16-4291-a210-ae7487d6fd7b" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="errorhandling-ravichandraFlow1" doc:id="abf19ad0-0cfc-42c7-a028-157732be052f" >
+		<http:listener doc:name="Listener" doc:id="c3312a69-6642-4f66-b3c8-acbaa5da69ae" config-ref="HTTP_Listener_config" path="/errorp">
+			<http:error-response >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<set-payload value='#["welcome to the main flow"]' doc:name="Set Payload" doc:id="edf9fd75-05f4-4cac-aa0f-4f440ac0784f" />
+		<flow-ref doc:name="Flow Reference" doc:id="daaaac72-62b8-4afa-8f83-2b636abdd558" name="errorhandling-ravichandraprivateFlow"/>
+	</flow>
+	<flow name="errorhandling-ravichandraprivateFlow" doc:id="71aaebc5-768a-4d57-96b7-4243be74ea4d" >
+		<http:request method="GET" doc:name="Request" doc:id="62c141d6-6e28-4354-bfe0-9906cdb6c777" url="usr.com"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4b3e5a0d-1591-4ecf-8c97-be215c60887d" type="HTTP:CONNECTIVITY">
+				<set-payload value='#["welcome to the error propagate"]' doc:name="Set Payload" doc:id="524fee4c-4d97-435c-9aaa-f33b6e354b37" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
